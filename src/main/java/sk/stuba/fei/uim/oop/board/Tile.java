@@ -4,13 +4,13 @@ import lombok.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.util.Objects;
 
 public class Tile extends JPanel {
     @Setter
     private boolean highlight;
     @Getter @Setter
-    private Type type;
+    private Type form;
     @Getter @Setter
     private int numberOfCaptures;
     @Getter @Setter
@@ -24,17 +24,28 @@ public class Tile extends JPanel {
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (type != Type.EMPTY) {
+        if (form != Type.EMPTY) {
             this.playable = true;
-            if (type == Type.STRAIGHT) {
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setColor(Color.RED);
-                Line2D lin = new Line2D.Float(this.getWidth() / 2, 0, this.getWidth() / 2, this.getHeight());
-                g2.draw(lin);
+            g.setColor(Color.RED);
+            if (this.form == Type.STRAIGHT && Objects.equals(form.getDirection(),Direction.NORTH) || Objects.equals(form.getDirection(),Direction.SOUTH)) {
+                g.fillRect(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/3);
+                g.fillRect(this.getWidth()/3,this.getHeight()/3,this.getWidth()/3,this.getHeight()/2);
+                g.fillRect(this.getWidth()/3,this.getHeight()/2,this.getWidth()/3,this.getHeight());
             }
+            else if (this.form == Type.RIGHT && Objects.equals(form.getDirection(),Direction.NORTH)) {
+                g.fillRect(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/3);
+                g.fillRect(this.getWidth()/3,this.getHeight()/3,this.getWidth()/3,this.getHeight()/3);
+                g.fillRect(0,this.getHeight()/3,this.getWidth()/3,this.getHeight()/3);
+            }
+            else if (this.form == Type.RIGHT && Objects.equals(form.getDirection(),Direction.SOUTH)) {
+                g.fillRect(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/3);
+                g.fillRect(this.getWidth()/3,this.getHeight()/3,this.getWidth()/3,this.getHeight()/3);
+                g.fillRect(0,this.getHeight()/3,this.getWidth()/3,this.getHeight()/3);
+            }
+           // else if ()
             if (this.highlight){
                 this.setBackground(Color.GRAY);
-                this.highlight = false;
+                //this.highlight = false;
             }
             else{
                 this.setBackground(Color.LIGHT_GRAY);

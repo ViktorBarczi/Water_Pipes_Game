@@ -2,12 +2,15 @@ package sk.stuba.fei.uim.oop.controls;
 
 import lombok.*;
 import sk.stuba.fei.uim.oop.board.Board;
+import sk.stuba.fei.uim.oop.board.Direction;
 import sk.stuba.fei.uim.oop.board.Tile;
+import sk.stuba.fei.uim.oop.board.Type;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 public class Logic extends Adapter{
     public static final int INITIAL_SIZE = 8;
@@ -19,6 +22,7 @@ public class Logic extends Adapter{
     private JLabel levelLabel;
     @Setter @Getter
     private JLabel boardSizeLabel;
+    private Component previous;
 
     public Logic (JFrame game){
         this.main = game;
@@ -30,6 +34,7 @@ public class Logic extends Adapter{
         this.levelLabel = new JLabel();
         this.updateBoardSizeLabel();
         this.updateLevelLabel();
+        this.previous = null;
     }
     private void initializeNewBoard(int dimension) {
         this.board = new Board(dimension);
@@ -62,10 +67,20 @@ public class Logic extends Adapter{
         if (!(current instanceof Tile)) {
             return;
         }
-        if (((Tile) current).isPlayable()) {
-            ((Tile) current).setHighlight(true);
+        if (Objects.equals(current,this.previous)) {
+            if (((Tile) current).isPlayable()) {
+                System.out.println("test");
+                ((Tile) current).setHighlight(true);
+            }
+        }
+        else{
+            if (this.previous != null)
+                ((Tile) this.previous).setHighlight(false);
         }
         this.board.repaint();
+
+        MouseEvent previousLocation = e;
+        this.previous = this.board.getComponentAt(previousLocation.getX(), e.getY());
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -74,6 +89,23 @@ public class Logic extends Adapter{
         this.main.repaint();
         this.main.setFocusable(true);
         this.main.requestFocus();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Component current = this.board.getComponentAt(e.getX(), e.getY());
+        if (!(current instanceof Tile)) {
+            return;
+        }
+        Direction[] directions = Direction.values();
+        if (((Tile) current).isPlayable()) {
+            for (int i = 0; i < directions.length; i++) {
+                if (((Tile) current).getForm().getDirection() == directions[i]){
+                    ((Tile) current).getForm().setDirection(i == directions.length - 1 ? directions[0] : directions[i + 1]);
+                }
+            }
+        }
+        this.board.repaint();
     }
 
 }
