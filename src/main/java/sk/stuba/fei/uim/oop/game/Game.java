@@ -11,7 +11,7 @@ public class Game {
         JFrame frame = new JFrame("Water Pipes");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800,800);
-        frame.getContentPane().setBackground(Color.CYAN);
+        frame.getContentPane().setBackground(Color.PINK);
         frame.setResizable(false);
         frame.setFocusable(true);
         frame.requestFocusInWindow();
@@ -20,7 +20,7 @@ public class Game {
         frame.addKeyListener(logic);
 
         JPanel sideMenu = new JPanel();
-        sideMenu.setBackground(Color.PINK);
+        sideMenu.setBackground(Color.cyan);
         JButton buttonRestart = new JButton("RESTART");
         buttonRestart.addActionListener(logic);
         buttonRestart.setFocusable(false);

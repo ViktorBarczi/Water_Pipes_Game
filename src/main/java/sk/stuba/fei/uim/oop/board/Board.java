@@ -17,6 +17,11 @@ public class Board extends JPanel {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 this.board[i][j] = new Tile();
+                this.board[i][j].setType(Type.EMPTY);
+                if (i == 1 && j == 1){
+                    this.board[i][j].setType(Type.STRAIGHT);
+                    this.board[i][j].setPlayable(true);
+                }
                 this.add(this.board[i][j]);
             }
         }
