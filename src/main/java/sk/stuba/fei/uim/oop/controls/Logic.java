@@ -4,11 +4,12 @@ import lombok.*;
 import sk.stuba.fei.uim.oop.board.Board;
 import sk.stuba.fei.uim.oop.board.Direction;
 import sk.stuba.fei.uim.oop.board.Tile;
-import sk.stuba.fei.uim.oop.board.Type;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
@@ -19,11 +20,9 @@ public class Logic extends Adapter {
     private Direction[] directions = Direction.values();
     private Board board;
     private int level;
-    @Setter
-    @Getter
+    @Setter @Getter
     private JLabel levelLabel;
-    @Setter
-    @Getter
+    @Setter @Getter
     private JLabel boardSizeLabel;
     private Component previous;
 
@@ -58,7 +57,7 @@ public class Logic extends Adapter {
         this.main.repaint();
     }
 
-    private void gameRestart() {
+    private void restart() {
         this.main.remove(this.board);
         this.initializeNewBoard(this.boardSize);
         this.main.add(this.board);
@@ -66,17 +65,28 @@ public class Logic extends Adapter {
     }
 
     private void rotate(Tile t) {
-        for (int i = 0; i < t.getDirections().length; i++) {
+        for (int i = 0; i < t.getType().getDirections().length; i++) {
             for (int j = 0; j < this.directions.length; j++) {
-                if (t.getDirections()[i] == this.directions[j]){
+                if (t.getType().getDirections()[i] == this.directions[j]){
                     int dIndex = j+1;
                     if (dIndex == this.directions.length)
                         dIndex = 0;
-                    t.getDirections()[i] = this.directions[dIndex];
+                    t.getType().getDirections()[i] = this.directions[dIndex];
                     break;
                 }
             }
         }
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        this.boardSize = ((JSlider) e.getSource()).getValue();
+        this.updateBoardSizeLabel();
+        this.restart();
+        this.main.revalidate();
+        this.main.repaint();
+        this.main.setFocusable(true);
+        this.main.requestFocus();
     }
 
 
@@ -87,10 +97,9 @@ public class Logic extends Adapter {
             return;
         }
         if (Objects.equals(current, this.previous)) {
-            if (((Tile) current).isPlayable()) {
-                System.out.println("test");
-                ((Tile) current).setHighlight(true);
-            }
+            //System.out.println("test");
+            ((Tile) current).setHighlight(true);
+
         } else {
             if (this.previous != null)
                 ((Tile) this.previous).setHighlight(false);
@@ -103,7 +112,7 @@ public class Logic extends Adapter {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.gameRestart();
+        this.restart();
         this.main.revalidate();
         this.main.repaint();
         this.main.setFocusable(true);
@@ -116,11 +125,26 @@ public class Logic extends Adapter {
         if (!(current instanceof Tile)) {
             return;
         }
-        Direction[] directions = Direction.values();
         if (((Tile) current).isPlayable()) {
             rotate(((Tile) current));
         }
         this.board.repaint();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e);
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_R:
+                this.restart();
+                this.main.revalidate();
+                this.main.repaint();
+                this.main.setFocusable(true);
+                this.main.requestFocus();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                this.main.dispose();
+        }
     }
 
 
