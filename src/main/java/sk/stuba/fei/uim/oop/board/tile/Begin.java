@@ -9,7 +9,6 @@ import java.awt.*;
 public class Begin extends Tile {
     public Begin(){
         super();
-        this.type = Type.BEGIN;
     }
 
     public void paintComponent(Graphics g) {

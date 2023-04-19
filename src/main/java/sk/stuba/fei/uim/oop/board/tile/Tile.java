@@ -18,7 +18,6 @@ public class Tile extends JPanel {
 
 
     public Tile() {
-        //this.state = State.EMPTY;
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.setBackground(Color.LIGHT_GRAY);
         this.type = Type.EMPTY;
@@ -27,24 +26,6 @@ public class Tile extends JPanel {
         super.paintComponent(g);
         if (this.playable) {
             this.drawPipe(g);
-           /* if (Objects.equals(this.type,Type.PIPE)) {
-                g.setColor(Color.BLACK);
-                g.fillRect(this.getWidth() / 3, this.getHeight() / 3, this.getWidth() / 3, this.getHeight() / 3);
-                this.type.getDirections()[0].drawPipe(this, g);
-                this.type.getDirections()[1].drawPipe(this, g);
-            }
-            if (Objects.equals(this.type,Type.BEGIN)){
-                g.setColor(Color.GREEN);
-                g.fillOval(this.getWidth()/4,this.getWidth()/4,this.getWidth()/2,this.getHeight()/2);
-                this.type.getDirections()[0].drawPipe(this, g);
-                this.type.getDirections()[1].drawPipe(this, g);
-            }
-            if (Objects.equals(this.type,Type.END)){
-                g.setColor(Color.RED);
-                g.fillOval(this.getWidth()/4,this.getWidth()/4,this.getWidth()/2,this.getHeight()/2);
-                this.type.getDirections()[0].drawPipe(this, g);
-                this.type.getDirections()[1].drawPipe(this, g);
-            }*/
         }
         if (this.highlight){
             this.setBackground(Color.GRAY);

@@ -1,13 +1,18 @@
 package sk.stuba.fei.uim.oop.board;
 
-
-import sk.stuba.fei.uim.oop.board.tile.Tile;
+import lombok.Getter;
+import lombok.Setter;
 
 public enum Type {
     BEGIN,
     END,
     PIPE,
     EMPTY;
+
+    @Setter @Getter
+    private boolean occupied;
+    @Setter @Getter
+    private Position pos;
 
     private Direction[] directions;
 

@@ -9,7 +9,6 @@ import java.awt.*;
 public class End extends Tile {
     public End(){
         super();
-        this.type = Type.END;
     }
 
     public void paintComponent(Graphics g) {

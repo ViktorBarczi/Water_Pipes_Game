@@ -9,7 +9,6 @@ import java.awt.*;
 public class Pipe extends Tile {
     public Pipe(){
         super();
-        this.type = Type.PIPE;
     }
 
     public void paintComponent(Graphics g) {
