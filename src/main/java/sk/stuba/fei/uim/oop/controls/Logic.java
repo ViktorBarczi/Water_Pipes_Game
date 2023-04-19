@@ -12,19 +12,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
-public class Logic extends Adapter{
+public class Logic extends Adapter {
     public static final int INITIAL_SIZE = 8;
-    JFrame main;
+    private JFrame main;
     private int boardSize;
+    private Direction[] directions = Direction.values();
     private Board board;
     private int level;
-    @Setter @Getter
+    @Setter
+    @Getter
     private JLabel levelLabel;
-    @Setter @Getter
+    @Setter
+    @Getter
     private JLabel boardSizeLabel;
     private Component previous;
 
-    public Logic (JFrame game){
+    public Logic(JFrame game) {
         this.main = game;
         this.boardSize = INITIAL_SIZE;
         this.initializeNewBoard(this.boardSize);
@@ -36,6 +39,7 @@ public class Logic extends Adapter{
         this.updateLevelLabel();
         this.previous = null;
     }
+
     private void initializeNewBoard(int dimension) {
         this.board = new Board(dimension);
         this.board.addMouseMotionListener(this);
@@ -61,19 +65,33 @@ public class Logic extends Adapter{
         //this.updateNameLabel();
     }
 
+    private void rotate(Tile t) {
+        for (int i = 0; i < t.getDirections().length; i++) {
+            for (int j = 0; j < this.directions.length; j++) {
+                if (t.getDirections()[i] == this.directions[j]){
+                    int dIndex = j+1;
+                    if (dIndex == this.directions.length)
+                        dIndex = 0;
+                    t.getDirections()[i] = this.directions[dIndex];
+                    break;
+                }
+            }
+        }
+    }
+
+
     @Override
     public void mouseMoved(MouseEvent e) {
         Component current = this.board.getComponentAt(e.getX(), e.getY());
         if (!(current instanceof Tile)) {
             return;
         }
-        if (Objects.equals(current,this.previous)) {
+        if (Objects.equals(current, this.previous)) {
             if (((Tile) current).isPlayable()) {
                 System.out.println("test");
                 ((Tile) current).setHighlight(true);
             }
-        }
-        else{
+        } else {
             if (this.previous != null)
                 ((Tile) this.previous).setHighlight(false);
         }
@@ -82,6 +100,7 @@ public class Logic extends Adapter{
         MouseEvent previousLocation = e;
         this.previous = this.board.getComponentAt(previousLocation.getX(), e.getY());
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         this.gameRestart();
@@ -99,13 +118,10 @@ public class Logic extends Adapter{
         }
         Direction[] directions = Direction.values();
         if (((Tile) current).isPlayable()) {
-            for (int i = 0; i < directions.length; i++) {
-                if (((Tile) current).getForm().getDirection() == directions[i]){
-                    ((Tile) current).getForm().setDirection(i == directions.length - 1 ? directions[0] : directions[i + 1]);
-                }
-            }
+            rotate(((Tile) current));
         }
         this.board.repaint();
     }
+
 
 }
