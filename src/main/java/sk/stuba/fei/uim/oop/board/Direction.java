@@ -1,5 +1,7 @@
 package sk.stuba.fei.uim.oop.board;
 
+import sk.stuba.fei.uim.oop.board.tile.Tile;
+
 import java.awt.*;
 
 public enum Direction {

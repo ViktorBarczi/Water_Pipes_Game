@@ -1,6 +1,8 @@
-package sk.stuba.fei.uim.oop.board;
+package sk.stuba.fei.uim.oop.board.tile;
 
 import lombok.*;
+import sk.stuba.fei.uim.oop.board.Direction;
+import sk.stuba.fei.uim.oop.board.Type;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,21 +10,24 @@ import java.util.Objects;
 
 public class Tile extends JPanel {
     @Setter
-    private boolean highlight;
+    protected boolean highlight;
     @Getter @Setter
-    private Type type;
+    protected Type type;
     @Getter @Setter
-    private boolean playable;
+    protected boolean playable;
+
 
     public Tile() {
         //this.state = State.EMPTY;
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.setBackground(Color.LIGHT_GRAY);
+        this.type = Type.EMPTY;
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.playable) {
-            if (Objects.equals(this.type,Type.PIPE)) {
+            this.drawPipe(g);
+           /* if (Objects.equals(this.type,Type.PIPE)) {
                 g.setColor(Color.BLACK);
                 g.fillRect(this.getWidth() / 3, this.getHeight() / 3, this.getWidth() / 3, this.getHeight() / 3);
                 this.type.getDirections()[0].drawPipe(this, g);
@@ -39,7 +44,7 @@ public class Tile extends JPanel {
                 g.fillOval(this.getWidth()/4,this.getWidth()/4,this.getWidth()/2,this.getHeight()/2);
                 this.type.getDirections()[0].drawPipe(this, g);
                 this.type.getDirections()[1].drawPipe(this, g);
-            }
+            }*/
         }
         if (this.highlight){
             this.setBackground(Color.GRAY);
@@ -48,6 +53,9 @@ public class Tile extends JPanel {
             this.setBackground(Color.LIGHT_GRAY);
         }
 
+    }
+
+    public void drawPipe(Graphics g){
     }
 
     public void changeColor(){

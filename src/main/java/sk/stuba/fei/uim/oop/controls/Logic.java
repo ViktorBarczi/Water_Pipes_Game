@@ -3,7 +3,7 @@ package sk.stuba.fei.uim.oop.controls;
 import lombok.*;
 import sk.stuba.fei.uim.oop.board.Board;
 import sk.stuba.fei.uim.oop.board.Direction;
-import sk.stuba.fei.uim.oop.board.Tile;
+import sk.stuba.fei.uim.oop.board.tile.Tile;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -106,8 +106,7 @@ public class Logic extends Adapter {
         }
         this.board.repaint();
 
-        MouseEvent previousLocation = e;
-        this.previous = this.board.getComponentAt(previousLocation.getX(), e.getY());
+        this.previous = this.board.getComponentAt(e.getX(), e.getY());
     }
 
     @Override
@@ -120,7 +119,7 @@ public class Logic extends Adapter {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         Component current = this.board.getComponentAt(e.getX(), e.getY());
         if (!(current instanceof Tile)) {
             return;

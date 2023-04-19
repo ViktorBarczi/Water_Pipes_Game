@@ -1,5 +1,10 @@
 package sk.stuba.fei.uim.oop.board;
 
+import sk.stuba.fei.uim.oop.board.tile.Begin;
+import sk.stuba.fei.uim.oop.board.tile.End;
+import sk.stuba.fei.uim.oop.board.tile.Pipe;
+import sk.stuba.fei.uim.oop.board.tile.Tile;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,8 +13,8 @@ public class Board extends JPanel {
     private Map map;
 
     public Board(int dimension){
-        this.initializeBoard(dimension);
         this.map = new Map(dimension);
+        this.initializeBoard(dimension);
     }
 
 
@@ -18,18 +23,30 @@ public class Board extends JPanel {
         this.setLayout(new GridLayout(dimension, dimension));
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                this.board[i][j] = new Tile();
-                if (i == 2 && j == 2){
-                    this.board[i][j].setType(Type.PIPE);
-                    this.board[i][j].getType().setDirections(Direction.WEST,Direction.NORTH);
-                    this.board[i][j].setPlayable(true);
-                }
-                if (i == 1 && j == 1){
-                    this.board[i][j].setType(Type.END);
-                    this.board[i][j].getType().setDirections(Direction.WEST,Direction.WEST);
-                    this.board[i][j].setPlayable(true);
-                }
+                if (this.map.getMap()[i][j] == Type.EMPTY)
+                    this.board[i][j] = new Tile();
+                else if (this.map.getMap()[i][j] == Type.PIPE)
+                    this.board[i][j] = new Pipe();
+                else if (this.map.getMap()[i][j] == Type.BEGIN)
+                    this.board[i][j] = new Begin();
+                else if (this.map.getMap()[i][j] == Type.END)
+                    this.board[i][j] = new End();
+
+                this.board[i][j].setType(this.map.getMap()[i][j]);
+
                 this.add(this.board[i][j]);
+            }
+        }
+        this.initializeMap(dimension);
+        return;
+    }
+    private void initializeMap(int dimension){
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                this.board[i][j].setType(this.map.getMap()[i][j]);
+                if(this.map.getMap()[i][j] != Type.EMPTY){
+                    this.board[i][j].setPlayable(true);
+                }
             }
         }
     }
