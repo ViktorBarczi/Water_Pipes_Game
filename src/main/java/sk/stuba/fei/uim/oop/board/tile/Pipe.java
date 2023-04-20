@@ -27,10 +27,15 @@ public class Pipe extends Tile {
 
     public void drawPipe(Graphics g){
         g.setColor(Color.BLACK);
-        g.fillRect(this.getWidth() / 3, this.getHeight() / 3, this.getWidth() / 3, this.getHeight() / 3);
+        if (this.occupied)
+            g.fillRect(this.getWidth() / 3, this.getHeight() / 3, this.getWidth() / 3, this.getHeight() / 3);
 
-        this.type.getDirections()[0].drawPipe(this, g);
-        this.type.getDirections()[1].drawPipe(this, g);
+        if (this.in != null){
+            this.in.drawPipe(this,g);
+        }
+        if (this.out != null){
+            this.out.drawPipe(this,g);
+        }
     }
 
 }

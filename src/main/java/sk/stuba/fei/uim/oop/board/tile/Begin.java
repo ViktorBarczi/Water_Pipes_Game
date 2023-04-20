@@ -28,7 +28,11 @@ public class Begin extends Tile {
     public void drawPipe(Graphics g){
         g.setColor(Color.GREEN);
         g.fillOval(this.getWidth()/4,this.getWidth()/4,this.getWidth()/2,this.getHeight()/2);
-        this.type.getDirections()[0].drawPipe(this, g);
-        this.type.getDirections()[1].drawPipe(this, g);
+        if (this.in != null){
+            this.in.drawPipe(this,g);
+        }
+        if (this.out != null){
+            this.out.drawPipe(this,g);
+        }
     }
 }

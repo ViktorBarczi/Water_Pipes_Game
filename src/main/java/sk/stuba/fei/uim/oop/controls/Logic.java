@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
+import java.util.Random;
 
 public class Logic extends Adapter {
     public static final int INITIAL_SIZE = 8;
@@ -25,9 +26,11 @@ public class Logic extends Adapter {
     @Setter @Getter
     private JLabel boardSizeLabel;
     private Component previous;
+    private Random rand;
 
     public Logic(JFrame game) {
         this.main = game;
+        this.rand = new Random();
         this.boardSize = INITIAL_SIZE;
         this.initializeNewBoard(this.boardSize);
         this.main.add(this.board);
@@ -41,6 +44,7 @@ public class Logic extends Adapter {
 
     private void initializeNewBoard(int dimension) {
         this.board = new Board(dimension);
+        this.shuffle();
         this.board.addMouseMotionListener(this);
         this.board.addMouseListener(this);
     }
@@ -65,14 +69,32 @@ public class Logic extends Adapter {
     }
 
     private void rotate(Tile t) {
-        for (int i = 0; i < t.getType().getDirections().length; i++) {
-            for (int j = 0; j < this.directions.length; j++) {
-                if (t.getType().getDirections()[i] == this.directions[j]){
-                    int dIndex = j+1;
-                    if (dIndex == this.directions.length)
-                        dIndex = 0;
-                    t.getType().getDirections()[i] = this.directions[dIndex];
-                    break;
+        boolean in = false;
+        boolean out = false;
+        for (int j = 0; j < this.directions.length; j++) {
+            if (t.getIn() == this.directions[j] && !in){
+                in = true;
+                int dIndex = j+1;
+                if (dIndex == this.directions.length)
+                    dIndex = 0;
+                t.setIn(this.directions[dIndex]);
+            }
+            if (t.getOut() == this.directions[j] && !out){
+                out = true;
+                int dIndex = j+1;
+                if (dIndex == this.directions.length)
+                    dIndex = 0;
+                t.setOut(this.directions[dIndex]);
+            }
+        }
+    }
+
+    private void shuffle(){
+        for (int i = 0; i < this.boardSize; i++) {
+            for (int j = 0; j < this.boardSize; j++) {
+                int pom = this.rand.nextInt(4);
+                for (int k = 0; k < pom; k++) {
+                    this.rotate(this.board.getBoard()[i][j]);
                 }
             }
         }

@@ -45,6 +45,5 @@ public class Game {
         frame.add(sideMenu, BorderLayout.PAGE_START);
 
         frame.setVisible(true);
-
     }
 }

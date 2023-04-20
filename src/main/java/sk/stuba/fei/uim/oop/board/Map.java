@@ -8,7 +8,7 @@ import java.util.Random;
 public class Map {
 
     @Getter
-    private Type[][] map;
+    private Position[][] map;
     private Position begin;
     private Position end;
     private Random rand;
@@ -18,54 +18,100 @@ public class Map {
         this.begin = new Position();
         this.end = new Position();
         this.initializeEmptyMap(dimension);
-        //this.createMap(dimension);
+        this.createMap(dimension);
     }
     private void initializeEmptyMap(int dimension){
-        this.map = new Type[dimension][dimension];
+        this.map = new Position[dimension][dimension];
         for (int i=0;i<dimension;i++){
             for(int j = 0;j<dimension;j++){
-                this.map[i][j] = Type.EMPTY;
+                this.map[i][j] = new Position();
+                this.map[i][j].setType(Type.PIPE);
+                this.map[i][j].setX(i);
+                this.map[i][j].setY(j);
             }
         }
         this.begin.setX(rand.nextInt(dimension));
         this.begin.setY(rand.nextInt(dimension));
-        this.map[this.begin.getX()][this.begin.getY()] = Type.BEGIN;
-        this.map[this.begin.getX()][this.begin.getY()].setDirections(Direction.NORTH,Direction.NORTH);
-        this.map[this.begin.getX()][this.begin.getY()].setPos(this.begin);
+        this.map[this.begin.getX()][this.begin.getY()].setType(Type.BEGIN);
+        this.map[this.begin.getX()][this.begin.getY()].setIn(null);
+        this.map[this.begin.getX()][this.begin.getY()].setOut(null);
+        //this.map[this.begin.getX()][this.begin.getY()].setPos(this.begin);
+        this.map[this.begin.getX()][this.begin.getY()].setOccupied(true);
 
         this.end.setX(rand.nextInt(dimension));
         this.end.setY(rand.nextInt(dimension));
-        this.map[this.end.getX()][this.end.getY()] = Type.END;
-        this.map[this.end.getX()][this.end.getY()].setDirections(Direction.NORTH,Direction.NORTH);
-        this.map[this.end.getX()][this.end.getY()].setPos(this.end);
+        this.map[this.end.getX()][this.end.getY()].setType(Type.END);
+        this.map[this.end.getX()][this.end.getY()].setOut(null);
+        this.map[this.end.getX()][this.end.getY()].setIn(null);
+        //this.map[this.end.getX()][this.end.getY()].setPos(this.end);
+        this.map[this.end.getX()][this.end.getY()].setOccupied(true);
     }
 
     private void createMap(int dimension){
-        randomizedDFS(this.map[this.begin.getX()][this.begin.getY()],dimension);
+        randomizedDFS(this.map[this.begin.getX()][this.begin.getY()],dimension,0);
     }
 
-    private void randomizedDFS(Type current,int dimension){
+    private void randomizedDFS(Position current,int dimension, int count){
+        if(count == 8){
+            initializeEmptyMap(dimension);
+            createMap(dimension);
+            return;
+        }
         current.setOccupied(true);
-        Position randPos = findRandomNeighbour(current.getPos().getX(),current.getPos().getY(),dimension);
-        Type next = this.map[randPos.getX()][randPos.getY()];
+        Position next = findRandomNeighbour(current,dimension);
+        next = this.map[next.getX()][next.getY()];
         if (!next.isOccupied()){
+            count = 0;
+            if (current.getY() > next.getY()){
+                current.setOut(Direction.WEST);
+                next.setIn(Direction.EAST);
+            }
+            else if (current.getY() < next.getY()){
+                current.setOut(Direction.EAST);
+                next.setIn(Direction.WEST);
+            }
+            else if (current.getX() < next.getX()){
+                current.setOut(Direction.SOUTH);
+                next.setIn(Direction.NORTH);
+            }
+            else if (current.getX() > next.getX()){
+                current.setOut(Direction.NORTH);
+                next.setIn(Direction.SOUTH);
+            }
 
-            randomizedDFS(next,dimension);
+            randomizedDFS(next,dimension,count);
         }
         else{
             if (Objects.equals(next,this.map[this.end.getX()][this.end.getY()])){
+                if (current.getY() > next.getY()){
+                    current.setOut(Direction.WEST);
+                    next.setIn(Direction.EAST);
+                }
+                else if (current.getY() < next.getY()){
+                    current.setOut(Direction.EAST);
+                    next.setIn(Direction.WEST);
+                }
+                else if (current.getX() < next.getX()){
+                    current.setOut(Direction.SOUTH);
+                    next.setIn(Direction.NORTH);
+                }
+                else if (current.getX() > next.getX()){
+                    current.setOut(Direction.NORTH);
+                    next.setIn(Direction.SOUTH);
+                }
                 return;
             }
-            randomizedDFS(next,dimension);
+            count++;
+            randomizedDFS(current,dimension,count);
         }
 
         //return;
-    }
+    }//Kedvenc baratnom a Kitti
 
-    private Position findRandomNeighbour(int x,int y,int dimension){
+    private Position findRandomNeighbour(Position current,int dimension){
         Position result = new Position();
-        result.setY(y);
-        result.setX(x);
+        result.setY(current.getY());
+        result.setX(current.getX());
         while(true) {
             if (rand.nextBoolean()) {
                 if (result.getX() == 0) {

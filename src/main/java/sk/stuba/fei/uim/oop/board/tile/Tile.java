@@ -15,6 +15,12 @@ public class Tile extends JPanel {
     protected Type type;
     @Getter @Setter
     protected boolean playable;
+    @Setter @Getter
+    protected Direction in;
+    @Setter @Getter
+    protected Direction out;
+    @Setter @Getter
+    protected boolean occupied;
 
 
     public Tile() {
