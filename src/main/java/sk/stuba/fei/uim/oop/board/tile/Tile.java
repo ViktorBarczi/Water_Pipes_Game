@@ -21,14 +21,20 @@ public class Tile extends JPanel {
     protected Direction out;
     @Setter @Getter
     protected boolean occupied;
+    protected Graphics graphics;
+    protected Color color;
+    @Setter
+    protected boolean good;
 
 
     public Tile() {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.setBackground(Color.LIGHT_GRAY);
         this.type = Type.EMPTY;
+        this.good = false;
     }
     public void paintComponent(Graphics g) {
+        this.graphics = g;
         super.paintComponent(g);
         if (this.playable) {
             this.drawPipe(g);
@@ -43,13 +49,14 @@ public class Tile extends JPanel {
     }
 
     public void drawPipe(Graphics g){
+
     }
 
     public void changeColor(){
-        if (this.getGraphics().getColor() == Color.BLACK){
-            this.getGraphics().setColor(Color.BLUE);
+        if (this.color == Color.BLACK && this.good){
+            this.color = (Color.BLUE);
         }
-        else
-            this.getGraphics().setColor(Color.BLACK);
+        else if (this.color == (Color.BLUE) && !this.good)
+            this.color = (Color.BLACK);
     }
 }

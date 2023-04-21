@@ -30,20 +30,52 @@ public class Map {
                 this.map[i][j].setY(j);
             }
         }
-        this.begin.setX(rand.nextInt(dimension));
-        this.begin.setY(rand.nextInt(dimension));
+        if(rand.nextBoolean()) {
+            if (rand.nextBoolean()) {
+                this.begin.setX(0);
+                this.begin.setY(rand.nextInt(dimension));
+            }
+            else{
+                this.begin.setX(dimension-1);
+                this.begin.setY(rand.nextInt(dimension));
+            }
+        }
+        else{
+            if (rand.nextBoolean()) {
+                this.begin.setY(0);
+                this.begin.setX(rand.nextInt(dimension));
+            }
+            else{
+                this.begin.setY(dimension-1);
+                this.begin.setX(rand.nextInt(dimension));
+            }
+        }
         this.map[this.begin.getX()][this.begin.getY()].setType(Type.BEGIN);
         this.map[this.begin.getX()][this.begin.getY()].setIn(null);
         this.map[this.begin.getX()][this.begin.getY()].setOut(null);
-        //this.map[this.begin.getX()][this.begin.getY()].setPos(this.begin);
         this.map[this.begin.getX()][this.begin.getY()].setOccupied(true);
 
-        this.end.setX(rand.nextInt(dimension));
-        this.end.setY(rand.nextInt(dimension));
+        if (this.begin.getX() == 0){
+            this.end.setX(dimension-1);
+            this.end.setY(rand.nextInt(dimension));
+        }
+        else if (this.begin.getX() == dimension-1){
+            this.end.setX(0);
+            this.end.setY(rand.nextInt(dimension));
+        }
+        if (this.begin.getY() == 0){
+            this.end.setY(dimension-1);
+            this.end.setX(rand.nextInt(dimension));
+        }
+        else if (this.begin.getY() == dimension-1){
+            this.end.setY(0);
+            this.end.setX(rand.nextInt(dimension));
+        }
+
+
         this.map[this.end.getX()][this.end.getY()].setType(Type.END);
         this.map[this.end.getX()][this.end.getY()].setOut(null);
         this.map[this.end.getX()][this.end.getY()].setIn(null);
-        //this.map[this.end.getX()][this.end.getY()].setPos(this.end);
         this.map[this.end.getX()][this.end.getY()].setOccupied(true);
     }
 
@@ -113,7 +145,7 @@ public class Map {
         result.setY(current.getY());
         result.setX(current.getX());
         while(true) {
-            if (rand.nextBoolean()) {
+            if (this.rand.nextBoolean()) {
                 if (result.getX() == 0) {
                     if (rand.nextBoolean()) {
                         result.setX(result.getX() + 1);

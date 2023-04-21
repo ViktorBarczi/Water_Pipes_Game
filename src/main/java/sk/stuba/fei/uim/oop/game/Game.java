@@ -16,15 +16,15 @@ public class Game {
         frame.setFocusable(true);
         frame.requestFocusInWindow();
 
-        Logic logic = new Logic(frame);
+        JButton buttonRestart = new JButton("RESTART");
+        JButton buttonCheck = new JButton("CHECK");
+        Logic logic = new Logic(frame,buttonRestart);
         frame.addKeyListener(logic);
 
         JPanel sideMenu = new JPanel();
         sideMenu.setBackground(Color.cyan);
-        JButton buttonRestart = new JButton("RESTART");
         buttonRestart.addActionListener(logic);
         buttonRestart.setFocusable(false);
-        JButton buttonCheck = new JButton("CHECK");
         buttonCheck.addActionListener(logic);
         buttonCheck.setFocusable(false);
         //user heslo

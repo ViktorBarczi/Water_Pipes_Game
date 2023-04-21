@@ -19,6 +19,7 @@ public class Logic extends Adapter {
     private JFrame main;
     private int boardSize;
     private Direction[] directions = Direction.values();
+    @Getter
     private Board board;
     private int level;
     @Setter @Getter
@@ -27,9 +28,11 @@ public class Logic extends Adapter {
     private JLabel boardSizeLabel;
     private Component previous;
     private Random rand;
+    private JButton buttonRestart;
 
-    public Logic(JFrame game) {
+    public Logic(JFrame game, JButton bR) {
         this.main = game;
+        this.buttonRestart = bR;
         this.rand = new Random();
         this.boardSize = INITIAL_SIZE;
         this.initializeNewBoard(this.boardSize);
@@ -65,7 +68,17 @@ public class Logic extends Adapter {
         this.main.remove(this.board);
         this.initializeNewBoard(this.boardSize);
         this.main.add(this.board);
+        this.main.revalidate();
+        this.main.repaint();
+        this.main.setFocusable(true);
+        this.main.requestFocus();
         //this.updateNameLabel();
+    }
+
+    private void victory(){
+        this.level++;
+        this.updateLevelLabel();
+        this.restart();
     }
 
     private void rotate(Tile t) {
@@ -133,11 +146,17 @@ public class Logic extends Adapter {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.restart();
-        this.main.revalidate();
-        this.main.repaint();
-        this.main.setFocusable(true);
-        this.main.requestFocus();
+        System.out.println(e.getSource());
+        if (e.getSource() == this.buttonRestart)
+            this.restart();
+        else {
+            this.board.repaint();
+            if(this.board.checkForWin()){
+                this.victory();
+                return;
+            }
+            this.board.repaint();
+        }
     }
 
     @Override
@@ -158,13 +177,16 @@ public class Logic extends Adapter {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_R:
                 this.restart();
-                this.main.revalidate();
-                this.main.repaint();
-                this.main.setFocusable(true);
-                this.main.requestFocus();
                 break;
             case KeyEvent.VK_ESCAPE:
                 this.main.dispose();
+            case KeyEvent.VK_ENTER:
+                this.board.repaint();
+                if(this.board.checkForWin()){
+                    this.victory();
+                    return;
+                }
+                this.board.repaint();
         }
     }
 

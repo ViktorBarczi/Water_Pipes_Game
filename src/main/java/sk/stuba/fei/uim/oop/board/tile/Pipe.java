@@ -9,6 +9,7 @@ import java.awt.*;
 public class Pipe extends Tile {
     public Pipe(){
         super();
+        this.color = Color.BLACK;
     }
 
     public void paintComponent(Graphics g) {
@@ -26,7 +27,7 @@ public class Pipe extends Tile {
     }
 
     public void drawPipe(Graphics g){
-        g.setColor(Color.BLACK);
+        g.setColor(this.color);
         if (this.occupied)
             g.fillRect(this.getWidth() / 3, this.getHeight() / 3, this.getWidth() / 3, this.getHeight() / 3);
 

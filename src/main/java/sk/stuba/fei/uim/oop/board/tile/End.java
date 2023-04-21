@@ -9,6 +9,7 @@ import java.awt.*;
 public class End extends Tile {
     public End(){
         super();
+        this.color = Color.RED;
     }
 
     public void paintComponent(Graphics g) {
@@ -26,7 +27,7 @@ public class End extends Tile {
     }
 
     public void drawPipe(Graphics g){
-        g.setColor(Color.RED);
+        g.setColor(this.color);
         g.fillOval(this.getWidth()/4,this.getWidth()/4,this.getWidth()/2,this.getHeight()/2);
         if (this.in != null){
             this.in.drawPipe(this,g);

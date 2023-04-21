@@ -13,8 +13,10 @@ public class Board extends JPanel {
     @Getter
     private Tile[][] board;
     private Map map;
+    private int boardSize;
 
     public Board(int dimension){
+        this.boardSize = dimension;
         this.map = new Map(dimension);
         this.initializeBoard(dimension);
     }
@@ -53,5 +55,33 @@ public class Board extends JPanel {
                 }
             }
         }
+    }
+
+    public boolean checkForWin(){
+        int count = 0;
+        for (int i = 0; i < this.boardSize; i++) {
+            for (int j = 0; j < this.boardSize; j++) {
+                if(this.board[i][j].getOut() == this.map.getMap()[i][j].getOut() || this.board[i][j].getOut() == this.map.getMap()[i][j].getIn()){
+                    if(this.board[i][j].getIn() == this.map.getMap()[i][j].getIn() || this.board[i][j].getIn() == this.map.getMap()[i][j].getOut()){
+                        this.board[i][j].setGood(true);
+                        this.board[i][j].changeColor();
+                        ++count;
+                        System.out.println(count);
+                        if (count == (this.boardSize*this.boardSize)){
+                            return true;
+                        }
+                    }
+                    else{
+                        this.board[i][j].setGood(false);
+                        this.board[i][j].changeColor();
+                    }
+                }
+                else{
+                    this.board[i][j].setGood(false);
+                    this.board[i][j].changeColor();
+                }
+            }
+        }
+        return false;
     }
 }
