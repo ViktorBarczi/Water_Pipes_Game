@@ -117,6 +117,8 @@ public class Logic extends Adapter {
     public void stateChanged(ChangeEvent e) {
         this.boardSize = ((JSlider) e.getSource()).getValue();
         this.updateBoardSizeLabel();
+        this.level = 1;
+        this.updateLevelLabel();
         this.restart();
         this.main.revalidate();
         this.main.repaint();
@@ -146,8 +148,11 @@ public class Logic extends Adapter {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.buttonRestart)
+        if (e.getSource() == this.buttonRestart) {
+            this.level = 1;
+            this.updateLevelLabel();
             this.restart();
+        }
         else {
             this.board.repaint();
             if(this.board.checkForWin()){
@@ -175,6 +180,8 @@ public class Logic extends Adapter {
         System.out.println(e);
         switch (e.getKeyCode()) {
             case KeyEvent.VK_R:
+                this.level = 1;
+                this.updateLevelLabel();
                 this.restart();
                 break;
             case KeyEvent.VK_ESCAPE:
