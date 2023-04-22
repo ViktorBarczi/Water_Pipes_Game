@@ -1,9 +1,5 @@
 package sk.stuba.fei.uim.oop.board.tile;
 
-import sk.stuba.fei.uim.oop.board.Direction;
-import sk.stuba.fei.uim.oop.board.Type;
-import sk.stuba.fei.uim.oop.board.tile.Tile;
-
 import java.awt.*;
 
 public class Begin extends Tile {

@@ -6,7 +6,6 @@ import sk.stuba.fei.uim.oop.board.Type;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class Tile extends JPanel {
     @Setter

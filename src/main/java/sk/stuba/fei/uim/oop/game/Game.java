@@ -27,7 +27,7 @@ public class Game {
         buttonRestart.setFocusable(false);
         buttonCheck.addActionListener(logic);
         buttonCheck.setFocusable(false);
-        //user heslo
+
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 8, 14, 8);
         slider.setMinorTickSpacing(2);
         slider.setMajorTickSpacing(2);

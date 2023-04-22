@@ -138,9 +138,7 @@ public class Map {
             count++;
             randomizedDFS(current,dimension,count);
         }
-
-        //return;
-    }//Kedvenc baratnom a Kitti
+    }
 
     private Position findRandomNeighbour(Position current,int dimension){
         Position result = new Position();

@@ -72,7 +72,6 @@ public class Logic extends Adapter {
         this.main.repaint();
         this.main.setFocusable(true);
         this.main.requestFocus();
-        //this.updateNameLabel();
     }
 
     private void victory(){
@@ -134,7 +133,6 @@ public class Logic extends Adapter {
             return;
         }
         if (Objects.equals(current, this.previous)) {
-            //System.out.println("test");
             ((Tile) current).setHighlight(true);
 
         } else {
