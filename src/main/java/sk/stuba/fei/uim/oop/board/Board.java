@@ -16,6 +16,8 @@ public class Board extends JPanel {
     private int boardSize;
     private Tile begin;
     private Tile end;
+    private boolean out;
+    private Tile current;
 
     public Board(int dimension){
         this.boardSize = dimension;
@@ -62,8 +64,8 @@ public class Board extends JPanel {
     }
 
     public boolean checkForWin() {
-        Tile current = this.begin;
-        boolean out = true;
+        current = this.begin;
+        out = true;
         for (int i = 0; i < this.boardSize; i++) {
             for (int j = 0; j < this.boardSize; j++) {
                 if (this.board[i][j].getColor() != Color.GREEN && this.board[i][j].getColor() != Color.RED) {
@@ -78,136 +80,48 @@ public class Board extends JPanel {
             }
             if (out) {
                 if (current.getOut() == Direction.NORTH && current.getXX() - 1 >= 0) {
-                    if (this.board[current.getXX() - 1][current.getYY()].getIn() == Direction.SOUTH) {
-                        out = true;
-                        current = this.board[current.getXX() - 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX() - 1][current.getYY()].getOut() == Direction.SOUTH) {
-                        out = false;
-                        current = this.board[current.getXX() - 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX() - 1,current.getYY(),Direction.SOUTH)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else if (current.getOut() == Direction.SOUTH && current.getXX() + 1 < this.boardSize) {
-                    if (this.board[current.getXX() + 1][current.getYY()].getIn() == Direction.NORTH) {
-                        out = true;
-                        current = this.board[current.getXX() + 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX() + 1][current.getYY()].getOut() == Direction.NORTH) {
-                        out = false;
-                        current = this.board[current.getXX() + 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX() + 1,current.getYY(),Direction.NORTH)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else if (current.getOut() == Direction.WEST && current.getYY() - 1 >= 0) {
-                    if (this.board[current.getXX()][current.getYY() - 1].getIn() == Direction.EAST) {
-                        out = true;
-                        current = this.board[current.getXX()][current.getYY() - 1];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX()][current.getYY() - 1].getOut() == Direction.EAST) {
-                        out = false;
-                        current = this.board[current.getXX()][current.getYY() - 1];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX(),current.getYY()-1,Direction.EAST)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else if (current.getOut() == Direction.EAST && current.getYY() + 1 < this.boardSize) {
-                    if (this.board[current.getXX()][current.getYY() + 1].getIn() == Direction.WEST) {
-                        out = true;
-                        current = this.board[current.getXX()][current.getYY() + 1];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX()][current.getYY() + 1].getOut() == Direction.WEST) {
-                        out = false;
-                        current = this.board[current.getXX()][current.getYY() + 1];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX(),current.getYY()+1,Direction.WEST)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else
                     break;
             } else {
                 if (current.getIn() == Direction.NORTH && current.getXX() - 1 >= 0) {
-                    if (this.board[current.getXX() - 1][current.getYY()].getIn() == Direction.SOUTH) {
-                        out = true;
-                        current = this.board[current.getXX() - 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX() - 1][current.getYY()].getOut() == Direction.SOUTH) {
-                        out = false;
-                        current = this.board[current.getXX() - 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX() - 1,current.getYY(),Direction.SOUTH)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else if (current.getIn() == Direction.SOUTH && current.getXX() + 1 < this.boardSize) {
-                    if (this.board[current.getXX() + 1][current.getYY()].getIn() == Direction.NORTH) {
-                        out = true;
-                        current = this.board[current.getXX() + 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX() + 1][current.getYY()].getOut() == Direction.NORTH) {
-                        out = false;
-                        current = this.board[current.getXX() + 1][current.getYY()];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX() + 1,current.getYY(),Direction.NORTH)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else if (current.getIn() == Direction.WEST && current.getYY() - 1 >= 0) {
-                    if (this.board[current.getXX()][current.getYY() - 1].getIn() == Direction.EAST) {
-                        out = true;
-                        current = this.board[current.getXX()][current.getYY() - 1];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX()][current.getYY() - 1].getOut() == Direction.EAST) {
-                        out = false;
-                        current = this.board[current.getXX()][current.getYY() - 1];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX(),current.getYY()-1,Direction.EAST)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else if (current.getIn() == Direction.EAST && current.getYY() + 1 < this.boardSize) {
-                    if (this.board[current.getXX()][current.getYY() + 1].getIn() == Direction.WEST) {
-                        out = true;
-                        current = this.board[current.getXX()][current.getYY() + 1];
-                        current.setGood(true);
-                        current.changeColor();
-                        continue;
-                    } else if (this.board[current.getXX()][current.getYY() + 1].getOut() == Direction.WEST) {
-                        out = false;
-                        current = this.board[current.getXX()][current.getYY() + 1];
-                        current.setGood(true);
-                        current.changeColor();
+                    if (check(current.getXX(),current.getYY()+1,Direction.WEST)){
                         continue;
                     }
-                    else
-                        break;
+                    break;
                 } else
                     break;
             }
@@ -215,15 +129,15 @@ public class Board extends JPanel {
         return false;
     }
 
-    private boolean check(Tile current, int x,int y, Boolean bool,Direction dir){
+    private boolean check(int x,int y,Direction dir){
         if (this.board[x][y].getIn() == dir) {
-            bool = true;
-            current = this.board[current.getXX()][current.getYY() + 1];
+            this.out = true;
+            current = this.board[x][y];
             current.setGood(true);
             current.changeColor();
             return true;
         } else if (this.board[x][y].getOut() == dir) {
-            bool = false;
+            this.out = false;
             current = this.board[x][y];
             current.setGood(true);
             current.changeColor();
