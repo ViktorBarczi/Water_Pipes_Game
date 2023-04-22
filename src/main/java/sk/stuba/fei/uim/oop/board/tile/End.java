@@ -7,8 +7,8 @@ import sk.stuba.fei.uim.oop.board.tile.Tile;
 import java.awt.*;
 
 public class End extends Tile {
-    public End(){
-        super();
+    public End(int a,int b){
+        super(a,b);
         this.color = Color.RED;
     }
 

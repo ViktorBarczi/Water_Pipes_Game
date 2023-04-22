@@ -22,16 +22,24 @@ public class Tile extends JPanel {
     @Setter @Getter
     protected boolean occupied;
     protected Graphics graphics;
+    @Setter @Getter
     protected Color color;
     @Setter
     protected boolean good;
+    @Setter @Getter
+    protected int xX;
+    @Setter @Getter
+    protected int yY;
 
 
-    public Tile() {
+
+    public Tile(int a, int b) {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.setBackground(Color.LIGHT_GRAY);
         this.type = Type.EMPTY;
         this.good = false;
+        this.xX = a;
+        this.yY = b;
     }
     public void paintComponent(Graphics g) {
         this.graphics = g;

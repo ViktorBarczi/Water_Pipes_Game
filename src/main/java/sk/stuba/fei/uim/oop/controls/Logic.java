@@ -146,7 +146,6 @@ public class Logic extends Adapter {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getSource());
         if (e.getSource() == this.buttonRestart)
             this.restart();
         else {

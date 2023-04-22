@@ -9,7 +9,9 @@ public class Map {
 
     @Getter
     private Position[][] map;
+    @Getter
     private Position begin;
+    @Getter
     private Position end;
     private Random rand;
 

@@ -14,6 +14,8 @@ public class Board extends JPanel {
     private Tile[][] board;
     private Map map;
     private int boardSize;
+    private Tile begin;
+    private Tile end;
 
     public Board(int dimension){
         this.boardSize = dimension;
@@ -28,13 +30,13 @@ public class Board extends JPanel {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (this.map.getMap()[i][j].getType() == Type.EMPTY)
-                    this.board[i][j] = new Tile();
+                    this.board[i][j] = new Tile(i,j);
                 else if (this.map.getMap()[i][j].getType() == Type.PIPE)
-                    this.board[i][j] = new Pipe();
+                    this.board[i][j] = new Pipe(i,j);
                 else if (this.map.getMap()[i][j].getType() == Type.BEGIN)
-                    this.board[i][j] = new Begin();
+                    this.board[i][j] = new Begin(i,j);
                 else if (this.map.getMap()[i][j].getType() == Type.END)
-                    this.board[i][j] = new End();
+                    this.board[i][j] = new End(i,j);
 
                 this.board[i][j].setType(this.map.getMap()[i][j].getType());
                 this.board[i][j].setIn(this.map.getMap()[i][j].getIn());
@@ -44,6 +46,8 @@ public class Board extends JPanel {
                 this.add(this.board[i][j]);
             }
         }
+        this.begin = this.board[this.map.getBegin().getX()][this.map.getBegin().getY()];
+        this.end = this.board[this.map.getEnd().getX()][this.map.getEnd().getY()];
         this.initializeMap(dimension);
     }
     private void initializeMap(int dimension){
@@ -57,31 +61,175 @@ public class Board extends JPanel {
         }
     }
 
-    public boolean checkForWin(){
-        int count = 0;
+    public boolean checkForWin() {
+        Tile current = this.begin;
+        boolean out = true;
         for (int i = 0; i < this.boardSize; i++) {
             for (int j = 0; j < this.boardSize; j++) {
-                if(this.board[i][j].getOut() == this.map.getMap()[i][j].getOut() || this.board[i][j].getOut() == this.map.getMap()[i][j].getIn()){
-                    if(this.board[i][j].getIn() == this.map.getMap()[i][j].getIn() || this.board[i][j].getIn() == this.map.getMap()[i][j].getOut()){
-                        this.board[i][j].setGood(true);
-                        this.board[i][j].changeColor();
-                        ++count;
-                        System.out.println(count);
-                        if (count == (this.boardSize*this.boardSize)){
-                            return true;
-                        }
-                    }
-                    else{
-                        this.board[i][j].setGood(false);
-                        this.board[i][j].changeColor();
-                    }
-                }
-                else{
+                if (this.board[i][j].getColor() != Color.GREEN && this.board[i][j].getColor() != Color.RED) {
                     this.board[i][j].setGood(false);
-                    this.board[i][j].changeColor();
+                    this.board[i][j].setColor(Color.BLACK);
                 }
             }
         }
+        while (true) {
+            if (current == this.end) {
+                return true;
+            }
+            if (out) {
+                if (current.getOut() == Direction.NORTH && current.getXX() - 1 >= 0) {
+                    if (this.board[current.getXX() - 1][current.getYY()].getIn() == Direction.SOUTH) {
+                        out = true;
+                        current = this.board[current.getXX() - 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX() - 1][current.getYY()].getOut() == Direction.SOUTH) {
+                        out = false;
+                        current = this.board[current.getXX() - 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else if (current.getOut() == Direction.SOUTH && current.getXX() + 1 < this.boardSize) {
+                    if (this.board[current.getXX() + 1][current.getYY()].getIn() == Direction.NORTH) {
+                        out = true;
+                        current = this.board[current.getXX() + 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX() + 1][current.getYY()].getOut() == Direction.NORTH) {
+                        out = false;
+                        current = this.board[current.getXX() + 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else if (current.getOut() == Direction.WEST && current.getYY() - 1 >= 0) {
+                    if (this.board[current.getXX()][current.getYY() - 1].getIn() == Direction.EAST) {
+                        out = true;
+                        current = this.board[current.getXX()][current.getYY() - 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX()][current.getYY() - 1].getOut() == Direction.EAST) {
+                        out = false;
+                        current = this.board[current.getXX()][current.getYY() - 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else if (current.getOut() == Direction.EAST && current.getYY() + 1 < this.boardSize) {
+                    if (this.board[current.getXX()][current.getYY() + 1].getIn() == Direction.WEST) {
+                        out = true;
+                        current = this.board[current.getXX()][current.getYY() + 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX()][current.getYY() + 1].getOut() == Direction.WEST) {
+                        out = false;
+                        current = this.board[current.getXX()][current.getYY() + 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else
+                    break;
+            } else {
+                if (current.getIn() == Direction.NORTH && current.getXX() - 1 >= 0) {
+                    if (this.board[current.getXX() - 1][current.getYY()].getIn() == Direction.SOUTH) {
+                        out = true;
+                        current = this.board[current.getXX() - 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX() - 1][current.getYY()].getOut() == Direction.SOUTH) {
+                        out = false;
+                        current = this.board[current.getXX() - 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else if (current.getIn() == Direction.SOUTH && current.getXX() + 1 < this.boardSize) {
+                    if (this.board[current.getXX() + 1][current.getYY()].getIn() == Direction.NORTH) {
+                        out = true;
+                        current = this.board[current.getXX() + 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX() + 1][current.getYY()].getOut() == Direction.NORTH) {
+                        out = false;
+                        current = this.board[current.getXX() + 1][current.getYY()];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else if (current.getIn() == Direction.WEST && current.getYY() - 1 >= 0) {
+                    if (this.board[current.getXX()][current.getYY() - 1].getIn() == Direction.EAST) {
+                        out = true;
+                        current = this.board[current.getXX()][current.getYY() - 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX()][current.getYY() - 1].getOut() == Direction.EAST) {
+                        out = false;
+                        current = this.board[current.getXX()][current.getYY() - 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else if (current.getIn() == Direction.EAST && current.getYY() + 1 < this.boardSize) {
+                    if (this.board[current.getXX()][current.getYY() + 1].getIn() == Direction.WEST) {
+                        out = true;
+                        current = this.board[current.getXX()][current.getYY() + 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    } else if (this.board[current.getXX()][current.getYY() + 1].getOut() == Direction.WEST) {
+                        out = false;
+                        current = this.board[current.getXX()][current.getYY() + 1];
+                        current.setGood(true);
+                        current.changeColor();
+                        continue;
+                    }
+                    else
+                        break;
+                } else
+                    break;
+            }
+        }
         return false;
+    }
+
+    private boolean check(Tile current, int x,int y, Boolean bool,Direction dir){
+        if (this.board[x][y].getIn() == dir) {
+            bool = true;
+            current = this.board[current.getXX()][current.getYY() + 1];
+            current.setGood(true);
+            current.changeColor();
+            return true;
+        } else if (this.board[x][y].getOut() == dir) {
+            bool = false;
+            current = this.board[x][y];
+            current.setGood(true);
+            current.changeColor();
+            return true;
+        }
+        else
+            return false;
     }
 }

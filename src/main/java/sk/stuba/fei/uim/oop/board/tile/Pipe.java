@@ -7,8 +7,8 @@ import sk.stuba.fei.uim.oop.board.tile.Tile;
 import java.awt.*;
 
 public class Pipe extends Tile {
-    public Pipe(){
-        super();
+    public Pipe(int a,int b){
+        super(a,b);
         this.color = Color.BLACK;
     }
 
