@@ -8,12 +8,12 @@ import java.util.Random;
 public class Map {
 
     @Getter
-    private Position[][] map;
+    private final Position[][] map;
     @Getter
-    private Position begin;
+    private final Position begin;
     @Getter
-    private Position end;
-    private Random rand;
+    private final Position end;
+    private final Random rand;
 
     public Map(int dimension) {
         this.rand = new Random();

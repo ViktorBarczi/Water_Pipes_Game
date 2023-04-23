@@ -16,9 +16,9 @@ import java.util.Random;
 
 public class Logic extends Adapter {
     public static final int INITIAL_SIZE = 8;
-    private JFrame main;
+    private final JFrame main;
     private int boardSize;
-    private Direction[] directions = Direction.values();
+    private final Direction[] directions;
     @Getter
     private Board board;
     private int level;
@@ -27,10 +27,11 @@ public class Logic extends Adapter {
     @Setter @Getter
     private JLabel boardSizeLabel;
     private Component previous;
-    private Random rand;
-    private JButton buttonRestart;
+    private final Random rand;
+    private final JButton buttonRestart;
 
     public Logic(JFrame game, JButton bR) {
+        this.directions = Direction.values();
         this.main = game;
         this.buttonRestart = bR;
         this.rand = new Random();
@@ -59,7 +60,7 @@ public class Logic extends Adapter {
     }
 
     private void updateBoardSizeLabel() {
-        this.boardSizeLabel.setText("BOARD SIZE: " + this.boardSize);
+        this.boardSizeLabel.setText("BOARD SIZE: " + this.boardSize + "x" + this.boardSize);
         this.main.revalidate();
         this.main.repaint();
     }
