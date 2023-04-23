@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Logic extends Adapter {
-    public static final int INITIAL_SIZE = 8;
     private final JFrame main;
     private int boardSize;
     private final Direction[] directions;
@@ -35,7 +34,7 @@ public class Logic extends Adapter {
         this.main = game;
         this.buttonRestart = bR;
         this.rand = new Random();
-        this.boardSize = INITIAL_SIZE;
+        this.boardSize = 8;
         this.initializeNewBoard(this.boardSize);
         this.main.add(this.board);
         this.level = 1;
@@ -193,6 +192,4 @@ public class Logic extends Adapter {
                 this.board.repaint();
         }
     }
-
-
 }
