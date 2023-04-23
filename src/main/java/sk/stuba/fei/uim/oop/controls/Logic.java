@@ -175,7 +175,6 @@ public class Logic extends Adapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e);
         switch (e.getKeyCode()) {
             case KeyEvent.VK_R:
                 this.level = 1;

@@ -5,7 +5,7 @@ import java.awt.*;
 public class Begin extends Tile {
     public Begin(int a,int b){
         super(a,b);
-        this.color = Color.GREEN;
+        this.color = new Color(0,150,0);
     }
 
     public void paintComponent(Graphics g) {

@@ -17,68 +17,67 @@ public class Map {
 
     public Map(int dimension) {
         this.rand = new Random();
-        this.begin = new Position();
-        this.end = new Position();
+        this.begin = new Position(0,0,Type.BEGIN);
+        this.end = new Position(0,0,Type.END);
+        this.map = new Position[dimension][dimension];
         this.initializeEmptyMap(dimension);
         this.createMap(dimension);
     }
     private void initializeEmptyMap(int dimension){
-        this.map = new Position[dimension][dimension];
         for (int i=0;i<dimension;i++){
             for(int j = 0;j<dimension;j++){
-                this.map[i][j] = new Position();
-                this.map[i][j].setType(Type.PIPE);
-                this.map[i][j].setX(i);
-                this.map[i][j].setY(j);
+                this.map[i][j] = new Position(i,j,Type.PIPE);
             }
         }
         if(rand.nextBoolean()) {
             if (rand.nextBoolean()) {
                 this.begin.setX(0);
-                this.begin.setY(rand.nextInt(dimension));
             }
             else{
                 this.begin.setX(dimension-1);
-                this.begin.setY(rand.nextInt(dimension));
             }
+            this.begin.setY(rand.nextInt(dimension));
         }
         else{
             if (rand.nextBoolean()) {
                 this.begin.setY(0);
-                this.begin.setX(rand.nextInt(dimension));
             }
             else{
                 this.begin.setY(dimension-1);
-                this.begin.setX(rand.nextInt(dimension));
             }
+            this.begin.setX(rand.nextInt(dimension));
         }
         this.map[this.begin.getX()][this.begin.getY()].setType(Type.BEGIN);
         this.map[this.begin.getX()][this.begin.getY()].setIn(null);
         this.map[this.begin.getX()][this.begin.getY()].setOut(null);
         this.map[this.begin.getX()][this.begin.getY()].setOccupied(true);
 
-        if (this.begin.getX() == 0){
-            this.end.setX(dimension-1);
-            this.end.setY(rand.nextInt(dimension));
-        }
-        else if (this.begin.getX() == dimension-1){
-            this.end.setX(0);
-            this.end.setY(rand.nextInt(dimension));
-        }
-        if (this.begin.getY() == 0){
-            this.end.setY(dimension-1);
-            this.end.setX(rand.nextInt(dimension));
-        }
-        else if (this.begin.getY() == dimension-1){
-            this.end.setY(0);
-            this.end.setX(rand.nextInt(dimension));
-        }
+        calibrateEndPosition(dimension);
 
 
         this.map[this.end.getX()][this.end.getY()].setType(Type.END);
         this.map[this.end.getX()][this.end.getY()].setOut(null);
         this.map[this.end.getX()][this.end.getY()].setIn(null);
         this.map[this.end.getX()][this.end.getY()].setOccupied(true);
+    }
+
+    private void calibrateEndPosition(int dimension) {
+        if (this.begin.getX() == 0){
+            this.end.setX(dimension -1);
+            this.end.setY(rand.nextInt(dimension));
+        }
+        else if (this.begin.getX() == dimension -1){
+            this.end.setX(0);
+            this.end.setY(rand.nextInt(dimension));
+        }
+        if (this.begin.getY() == 0){
+            this.end.setY(dimension -1);
+            this.end.setX(rand.nextInt(dimension));
+        }
+        else if (this.begin.getY() == dimension -1){
+            this.end.setY(0);
+            this.end.setX(rand.nextInt(dimension));
+        }
     }
 
     private void createMap(int dimension){
@@ -96,43 +95,13 @@ public class Map {
         next = this.map[next.getX()][next.getY()];
         if (!next.isOccupied()){
             count = 0;
-            if (current.getY() > next.getY()){
-                current.setOut(Direction.WEST);
-                next.setIn(Direction.EAST);
-            }
-            else if (current.getY() < next.getY()){
-                current.setOut(Direction.EAST);
-                next.setIn(Direction.WEST);
-            }
-            else if (current.getX() < next.getX()){
-                current.setOut(Direction.SOUTH);
-                next.setIn(Direction.NORTH);
-            }
-            else if (current.getX() > next.getX()){
-                current.setOut(Direction.NORTH);
-                next.setIn(Direction.SOUTH);
-            }
+            direction(current, next);
 
             randomizedDFS(next,dimension,count);
         }
         else{
             if (Objects.equals(next,this.map[this.end.getX()][this.end.getY()])){
-                if (current.getY() > next.getY()){
-                    current.setOut(Direction.WEST);
-                    next.setIn(Direction.EAST);
-                }
-                else if (current.getY() < next.getY()){
-                    current.setOut(Direction.EAST);
-                    next.setIn(Direction.WEST);
-                }
-                else if (current.getX() < next.getX()){
-                    current.setOut(Direction.SOUTH);
-                    next.setIn(Direction.NORTH);
-                }
-                else if (current.getX() > next.getX()){
-                    current.setOut(Direction.NORTH);
-                    next.setIn(Direction.SOUTH);
-                }
+                direction(current, next);
                 return;
             }
             count++;
@@ -140,10 +109,27 @@ public class Map {
         }
     }
 
+    private void direction(Position current, Position next) {
+        if (current.getY() > next.getY()){
+            current.setOut(Direction.WEST);
+            next.setIn(Direction.EAST);
+        }
+        else if (current.getY() < next.getY()){
+            current.setOut(Direction.EAST);
+            next.setIn(Direction.WEST);
+        }
+        else if (current.getX() < next.getX()){
+            current.setOut(Direction.SOUTH);
+            next.setIn(Direction.NORTH);
+        }
+        else if (current.getX() > next.getX()){
+            current.setOut(Direction.NORTH);
+            next.setIn(Direction.SOUTH);
+        }
+    }
+
     private Position findRandomNeighbour(Position current,int dimension){
-        Position result = new Position();
-        result.setY(current.getY());
-        result.setX(current.getX());
+        Position result = new Position(current.getX(),current.getY(),Type.PIPE);
         while(true) {
             if (this.rand.nextBoolean()) {
                 if (result.getX() == 0) {

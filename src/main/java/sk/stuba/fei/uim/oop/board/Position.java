@@ -19,7 +19,10 @@ public class Position {
     @Setter @Getter
     private Direction out;
 
-    public Position(){
+    public Position(int a,int b, Type t){
+        this.x = a;
+        this.y = b;
         this.occupied = false;
+        this.type = t;
     }
 }

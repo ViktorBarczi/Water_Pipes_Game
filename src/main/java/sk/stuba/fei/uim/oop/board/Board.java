@@ -22,12 +22,12 @@ public class Board extends JPanel {
     public Board(int dimension){
         this.boardSize = dimension;
         this.map = new Map(dimension);
+        this.board = new Tile[dimension][dimension];
         this.initializeBoard(dimension);
     }
 
 
     private void initializeBoard(int dimension) {
-        this.board = new Tile[dimension][dimension];
         this.setLayout(new GridLayout(dimension, dimension));
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -68,7 +68,7 @@ public class Board extends JPanel {
         out = true;
         for (int i = 0; i < this.boardSize; i++) {
             for (int j = 0; j < this.boardSize; j++) {
-                if (this.board[i][j].getColor() != Color.GREEN && this.board[i][j].getColor() != Color.RED) {
+                if (!this.board[i][j].getColor().equals(new Color(0, 150, 0)) && this.board[i][j].getColor() != Color.RED) {
                     this.board[i][j].setGood(false);
                     this.board[i][j].setColor(Color.BLACK);
                 }
