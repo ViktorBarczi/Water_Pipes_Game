@@ -32,13 +32,14 @@ public class Tile extends JPanel {
 
 
 
-    public Tile(int a, int b) {
+    public Tile(int a, int b,Color c) {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.setBackground(Color.LIGHT_GRAY);
         this.type = Type.EMPTY;
         this.good = false;
         this.xX = a;
         this.yY = b;
+        this.color = c;
     }
     public void paintComponent(Graphics g) {
         this.graphics = g;

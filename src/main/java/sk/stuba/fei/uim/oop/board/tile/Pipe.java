@@ -3,9 +3,9 @@ package sk.stuba.fei.uim.oop.board.tile;
 import java.awt.*;
 
 public class Pipe extends Tile {
-    public Pipe(int a,int b){
-        super(a,b);
-        this.color = Color.BLACK;
+    public Pipe(int a,int b, Color c){
+        super(a,b,c);
+        this.color = c;
     }
 
     public void paintComponent(Graphics g) {

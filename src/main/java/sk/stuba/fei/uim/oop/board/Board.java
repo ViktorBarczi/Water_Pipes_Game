@@ -2,12 +2,12 @@ package sk.stuba.fei.uim.oop.board;
 
 import lombok.Getter;
 import sk.stuba.fei.uim.oop.board.tile.Begin;
-import sk.stuba.fei.uim.oop.board.tile.End;
 import sk.stuba.fei.uim.oop.board.tile.Pipe;
 import sk.stuba.fei.uim.oop.board.tile.Tile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class Board extends JPanel {
     @Getter
@@ -31,14 +31,14 @@ public class Board extends JPanel {
         this.setLayout(new GridLayout(dimension, dimension));
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                if (this.map.getMap()[i][j].getType() == Type.EMPTY)
-                    this.board[i][j] = new Tile(i,j);
-                else if (this.map.getMap()[i][j].getType() == Type.PIPE)
-                    this.board[i][j] = new Pipe(i,j);
-                else if (this.map.getMap()[i][j].getType() == Type.BEGIN)
-                    this.board[i][j] = new Begin(i,j);
-                else if (this.map.getMap()[i][j].getType() == Type.END)
-                    this.board[i][j] = new End(i,j);
+                if (Objects.equals(this.map.getMap()[i][j].getType(),Type.EMPTY))
+                    this.board[i][j] = new Tile(i,j,Color.BLACK);
+                else if (Objects.equals(this.map.getMap()[i][j].getType(),Type.PIPE))
+                    this.board[i][j] = new Pipe(i,j,Color.BLACK);
+                else if (Objects.equals(this.map.getMap()[i][j].getType(),Type.BEGIN))
+                    this.board[i][j] = new Begin(i,j,new Color(0,150,0));
+                else if (Objects.equals(this.map.getMap()[i][j].getType(),Type.END))
+                    this.board[i][j] = new Begin(i,j,Color.RED);
 
                 this.board[i][j].setType(this.map.getMap()[i][j].getType());
                 this.board[i][j].setIn(this.map.getMap()[i][j].getIn());
@@ -75,26 +75,26 @@ public class Board extends JPanel {
             }
         }
         while (true) {
-            if (current == this.end) {
+            if (Objects.equals(current,this.end)) {
                 return true;
             }
             if (out) {
-                if (current.getOut() == Direction.NORTH && current.getXX() - 1 >= 0) {
+                if (Objects.equals(current.getOut(),Direction.NORTH) && current.getXX() - 1 >= 0) {
                     if (check(current.getXX() - 1,current.getYY(),Direction.SOUTH)){
                         continue;
                     }
                     break;
-                } else if (current.getOut() == Direction.SOUTH && current.getXX() + 1 < this.boardSize) {
+                } else if (Objects.equals(current.getOut(),Direction.SOUTH) && current.getXX() + 1 < this.boardSize) {
                     if (check(current.getXX() + 1,current.getYY(),Direction.NORTH)){
                         continue;
                     }
                     break;
-                } else if (current.getOut() == Direction.WEST && current.getYY() - 1 >= 0) {
+                } else if (Objects.equals(current.getOut(),Direction.WEST) && current.getYY() - 1 >= 0) {
                     if (check(current.getXX(),current.getYY()-1,Direction.EAST)){
                         continue;
                     }
                     break;
-                } else if (current.getOut() == Direction.EAST && current.getYY() + 1 < this.boardSize) {
+                } else if (Objects.equals(current.getOut(),Direction.EAST) && current.getYY() + 1 < this.boardSize) {
                     if (check(current.getXX(),current.getYY()+1,Direction.WEST)){
                         continue;
                     }
@@ -102,22 +102,22 @@ public class Board extends JPanel {
                 } else
                     break;
             } else {
-                if (current.getIn() == Direction.NORTH && current.getXX() - 1 >= 0) {
+                if (Objects.equals(current.getIn(),Direction.NORTH) && current.getXX() - 1 >= 0) {
                     if (check(current.getXX() - 1,current.getYY(),Direction.SOUTH)){
                         continue;
                     }
                     break;
-                } else if (current.getIn() == Direction.SOUTH && current.getXX() + 1 < this.boardSize) {
+                } else if (Objects.equals(current.getIn(),Direction.SOUTH) && current.getXX() + 1 < this.boardSize) {
                     if (check(current.getXX() + 1,current.getYY(),Direction.NORTH)){
                         continue;
                     }
                     break;
-                } else if (current.getIn() == Direction.WEST && current.getYY() - 1 >= 0) {
+                } else if (Objects.equals(current.getIn(),Direction.WEST) && current.getYY() - 1 >= 0) {
                     if (check(current.getXX(),current.getYY()-1,Direction.EAST)){
                         continue;
                     }
                     break;
-                } else if (current.getIn() == Direction.EAST && current.getYY() + 1 < this.boardSize) {
+                } else if (Objects.equals(current.getIn(),Direction.EAST) && current.getYY() + 1 < this.boardSize) {
                     if (check(current.getXX(),current.getYY()+1,Direction.WEST)){
                         continue;
                     }
@@ -130,13 +130,13 @@ public class Board extends JPanel {
     }
 
     private boolean check(int x,int y,Direction dir){
-        if (this.board[x][y].getIn() == dir) {
+        if (Objects.equals(this.board[x][y].getIn(),dir)) {
             this.out = true;
             current = this.board[x][y];
             current.setGood(true);
             current.changeColor();
             return true;
-        } else if (this.board[x][y].getOut() == dir) {
+        } else if (Objects.equals(this.board[x][y].getOut(),dir)) {
             this.out = false;
             current = this.board[x][y];
             current.setGood(true);

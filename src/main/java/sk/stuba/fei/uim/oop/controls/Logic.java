@@ -84,14 +84,14 @@ public class Logic extends Adapter {
         boolean in = false;
         boolean out = false;
         for (int j = 0; j < this.directions.length; j++) {
-            if (t.getIn() == this.directions[j] && !in){
+            if (Objects.equals(t.getIn(),this.directions[j]) && !in){
                 in = true;
                 int dIndex = j+1;
                 if (dIndex == this.directions.length)
                     dIndex = 0;
                 t.setIn(this.directions[dIndex]);
             }
-            if (t.getOut() == this.directions[j] && !out){
+            if (Objects.equals(t.getOut(),this.directions[j]) && !out){
                 out = true;
                 int dIndex = j+1;
                 if (dIndex == this.directions.length)
@@ -146,7 +146,7 @@ public class Logic extends Adapter {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.buttonRestart) {
+        if (Objects.equals(e.getSource(),this.buttonRestart)) {
             this.level = 1;
             this.updateLevelLabel();
             this.restart();
